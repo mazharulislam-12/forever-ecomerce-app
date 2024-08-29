@@ -55,7 +55,38 @@ const ShopContextProdiver = (props) =>{
         }
         return totalCount;
 
+    };
+
+    const updateQuantity = async (itemId,size, quantity) =>{
+        let cartData = structuredClone(cartItems)
+
+        cartData[itemId][size] = quantity;
+
+        setCartItems(cartData)
+
+    };
+
+    const getCartAmount = () => {
+        let totalAmount = 0;
+        for (const itemId in cartItems) {
+           
+            let itemInfo = products.find(product => product._id === itemId);
+            if (itemInfo) {
+                for (const key in cartItems[itemId]) {
+                    try {
+                        if (cartItems[itemId][key] > 0) {
+                            totalAmount += itemInfo.price * cartItems[itemId][key];
+                        }
+                    } catch (error) {
+                        
+                    }
+                }
+            }
+        }
+        return totalAmount;
     }
+    
+
     
 
 
@@ -63,7 +94,9 @@ const ShopContextProdiver = (props) =>{
         products, currency, delivary_fee,
         search, setSearch, showSearch, setShowSearch,
         cartItems, addToCart, 
-        getCartCount
+        getCartCount,
+        updateQuantity,
+        getCartAmount
 
     }
 
