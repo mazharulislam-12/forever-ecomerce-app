@@ -15,23 +15,23 @@ const Navbar = () => {
             <Link to='/'>
                 <img className="w-36" src={assets.logo} alt="logo" />
             </Link>
-            <ul className="hidden sm:flex gap-5 text-sm text-gray-700 ">
+            <ul className="hidden sm:flex gap-6 text-sm text-gray-700 ">
 
-                <NavLink to='/' className='flex flex-col items-center gap-1 '>
+                <NavLink to='/' className='flex flex-col items-center gap-1 hover:bg-gray-600 hover:px-2 hover:py-0 hover:text-white hover:rounded-sm '>
                     <p>HOME</p>
-                    <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden " />
+                    <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden hover:bg-gray-600 hover:px-2 hover:py-1 hover:text-white hover:rounded-sm " />
                 </NavLink>
-                <NavLink to='/collection' className='flex flex-col items-center gap-1 '>
+                <NavLink to='/collection' className='flex flex-col items-center gap-1 hover:bg-gray-600 hover:px-2 hover:py-1 hover:text-white hover:rounded-sm'>
                     <p>COLLACTION</p>
-                    <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden " />
+                    <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden hover:bg-gray-600 hover:px-2 hover:py-1 hover:text-white hover:rounded-sm" />
                 </NavLink>
-                <NavLink to='/about' className='flex flex-col items-center gap-1 '>
+                <NavLink to='/about' className='flex flex-col items-center gap-1 hover:bg-gray-600 hover:px-2 hover:py-1 hover:text-white hover:rounded-sm '>
                     <p>ABOUT</p>
-                    <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden " />
+                    <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden hover:bg-gray-600 hover:px-2 hover:py-1 hover:text-white hover:rounded-sm" />
                 </NavLink>
-                <NavLink to='/contact' className='flex flex-col items-center gap-1 '>
+                <NavLink to='/contact' className='flex flex-col items-center gap-1 hover:bg-gray-600 hover:px-2 hover:py-1 hover:text-white hover:rounded-sm'>
                     <p>CONTACT</p>
-                    <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden " />
+                    <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden hover:bg-gray-600 hover:px-2 hover:py-1 hover:text-white hover:rounded-sm" />
                 </NavLink>
 
             </ul>

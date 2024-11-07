@@ -12,6 +12,7 @@ const Product = () => {
     const [size, setSize] = useState('');
     const [reviews, setReviews] = useState([]);
     const [reviewText, setReviewText] = useState('');
+    const [reviewImage, setReviewImage] = useState(null); // For review image
     const [couponCode, setCouponCode] = useState('');
     const [discount, setDiscount] = useState(0);
     const [activeTab, setActiveTab] = useState('description');
@@ -25,7 +26,6 @@ const Product = () => {
         });
     };
 
-    // Fetch reviews from localStorage on component mount
     useEffect(() => {
         const savedReviews = JSON.parse(localStorage.getItem(`reviews-${productId}`));
         if (savedReviews) {
@@ -34,11 +34,13 @@ const Product = () => {
     }, [productId]);
 
     const handleReviewSubmit = () => {
-        if (reviewText) {
-            const newReviews = [...reviews, reviewText];
+        if (reviewText || reviewImage) {
+            const newReview = { text: reviewText, image: reviewImage };
+            const newReviews = [...reviews, newReview];
             setReviews(newReviews);
             setReviewText('');
-            localStorage.setItem(`reviews-${productId}`, JSON.stringify(newReviews)); // Save to localStorage
+            setReviewImage(null);
+            localStorage.setItem(`reviews-${productId}`, JSON.stringify(newReviews));
         }
     };
 
@@ -48,6 +50,15 @@ const Product = () => {
             alert("Coupon applied! You get a 20% discount.");
         } else {
             alert("Invalid coupon code.");
+        }
+    };
+
+    const handleImageChange = (e) => {
+        const file = e.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onload = () => setReviewImage(reader.result);
+            reader.readAsDataURL(file);
         }
     };
 
@@ -157,7 +168,10 @@ const Product = () => {
                         {reviews.length > 0 ? (
                             reviews.map((review, index) => (
                                 <div key={index} className='border p-3 rounded-md mb-3 bg-gray-50'>
-                                    <p>{review}</p>
+                                    <p>{review.text}</p>
+                                    {review.image && (
+                                        <img src={review.image} alt="Review" className="w-32 h-32 mt-2 rounded-md" />
+                                    )}
                                 </div>
                             ))
                         ) : (
@@ -175,6 +189,11 @@ const Product = () => {
                             value={reviewText}
                             onChange={(e) => setReviewText(e.target.value)}
                             className='border w-full p-2 text-sm'
+                        />
+                        <input
+                            type="file"
+                            onChange={handleImageChange}
+                            className='mt-2'
                         />
                         <button onClick={handleReviewSubmit} className='bg-black text-white px-4 py-2 mt-2'>Submit Review</button>
                     </div>
