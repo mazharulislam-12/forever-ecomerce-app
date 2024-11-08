@@ -12,10 +12,12 @@ const Product = () => {
     const [size, setSize] = useState('');
     const [reviews, setReviews] = useState([]);
     const [reviewText, setReviewText] = useState('');
-    const [reviewImage, setReviewImage] = useState(null); // For review image
+    const [reviewImage, setReviewImage] = useState(null);
     const [couponCode, setCouponCode] = useState('');
     const [discount, setDiscount] = useState(0);
     const [activeTab, setActiveTab] = useState('description');
+    const [user, setUser] = useState(null); // Assuming user state is fetched here
+    const [reviewRating, setReviewRating] = useState(0);
 
     const fetchProductData = async () => {
         products.forEach((item) => {
@@ -35,11 +37,20 @@ const Product = () => {
 
     const handleReviewSubmit = () => {
         if (reviewText || reviewImage) {
-            const newReview = { text: reviewText, image: reviewImage };
+            const newReview = { 
+                text: reviewText, 
+                image: reviewImage, 
+                name: user?.displayName || 'Anonymous', 
+                email: user?.email || 'N/A', 
+                userImage: user?.photoURL || 'https://via.placeholder.com/50', 
+                date: new Date().toLocaleDateString(), 
+                rating: reviewRating 
+            };
             const newReviews = [...reviews, newReview];
             setReviews(newReviews);
             setReviewText('');
             setReviewImage(null);
+            setReviewRating(0); // Reset rating after submit
             localStorage.setItem(`reviews-${productId}`, JSON.stringify(newReviews));
         }
     };
@@ -168,6 +179,19 @@ const Product = () => {
                         {reviews.length > 0 ? (
                             reviews.map((review, index) => (
                                 <div key={index} className='border p-3 rounded-md mb-3 bg-gray-50'>
+                                    <div className='flex justify-between'>
+                                        <div className='flex items-center'>
+                                            <img 
+                                                src={review.userImage} 
+                                                alt="User Avatar" 
+                                                className="w-8 h-8 rounded-full mr-2" 
+                                            />
+                                            <p className='font-medium'>{review.name}</p>
+                                        </div>
+                                        <p className='text-sm text-gray-400'>{review.email}</p>
+                                    </div>
+                                    <p className='text-gray-400 text-sm'>{review.date}</p>
+                                    <p>Rating: {review.rating} Stars</p>
                                     <p>{review.text}</p>
                                     {review.image && (
                                         <img src={review.image} alt="Review" className="w-32 h-32 mt-2 rounded-md" />
@@ -195,15 +219,33 @@ const Product = () => {
                             onChange={handleImageChange}
                             className='mt-2'
                         />
-                        <button onClick={handleReviewSubmit} className='bg-black text-white px-4 py-2 mt-2'>Submit Review</button>
+                        <select
+                            value={reviewRating}
+                            onChange={(e) => setReviewRating(parseInt(e.target.value))}
+                            className='mt-2 border p-2 text-sm'
+                        >
+                            <option value={0}>Select Rating</option>
+                            <option value={1}>1 Star</option>
+                            <option value={2}>2 Stars</option>
+                            <option value={3}>3 Stars</option>
+                            <option value={4}>4 Stars</option>
+                            <option value={5}>5 Stars</option>
+                        </select>
+                        <button
+                            onClick={handleReviewSubmit}
+                            className='bg-black text-white px-4 py-2 mt-2'
+                        >
+                            Submit Review
+                        </button>
                     </div>
                 )}
             </div>
 
-            {/* display related products */}
-            <RelatedProuct category={productData.category} subCategory={productData.subCategory} />
+            <RelatedProuct category={productData.category} />
         </div>
-    ) : <div className='opacity-0'></div>;
+    ) : (
+        <div>Loading...</div>
+    );
 };
 
 export default Product;
